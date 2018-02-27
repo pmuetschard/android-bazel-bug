@@ -1,0 +1,27 @@
+load(":rules.bzl", "my_manifest")
+
+py_binary(
+    name = "hash",
+    srcs = ["hash.py"],
+)
+
+filegroup(
+    name = "source",
+    srcs = ["MainActivity.java"],
+)
+
+my_manifest(
+    name = "manifest",
+    srcs = [":source"],
+    template = "AndroidManifest.xml.in",
+    out = "AndroidManifest.xml",
+)
+
+android_binary(
+    name = "test",
+    srcs = [":source"],
+    manifest = ":manifest",
+    manifest_values = { "name": "Testing" },
+    manifest_merger = "android",
+    custom_package = "test",
+)
